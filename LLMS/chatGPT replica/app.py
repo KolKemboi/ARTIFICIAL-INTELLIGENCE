@@ -1,9 +1,9 @@
 import streamlit as st
+import llm
 
-# Streamlit UI Code
+
 st.set_page_config(page_title="ChatGPT Replica", page_icon="🤖", layout="wide")
 
-# Custom CSS to style the chat interface
 st.markdown("""
     <style>
     .user-message {
@@ -25,18 +25,14 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# Create a chat container in the middle of the page
 with st.container():
     st.title("ChatGPT Replica 🤖")
     
-    # Scrollable chat history
     chat_container = st.container()
     
-    # Initialize the session state to store chat history
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
     
-    # Display chat messages
     with chat_container:
         for chat in st.session_state.chat_history:
             if chat["is_user"]:
@@ -44,18 +40,12 @@ with st.container():
             else:
                 st.markdown(f'<div class="bot-message"><b>Bot:</b> {chat["message"]}</div>', unsafe_allow_html=True)
     
-    # User input
     user_input = st.text_input("Type your message here...")
     
-    # If user sends a message
     if user_input:
-        # Add user's message to chat history
         st.session_state.chat_history.append({"message": user_input, "is_user": True})
         
-        # Generate response from model
         with st.spinner("Generating response..."):
-            bot_response = "dfhvujiarhuigvjnaijfoavj"
+            bot_response = llm.gen_response(user_input)
         
-        # Add bot's response to chat history
         st.session_state.chat_history.append({"message": bot_response, "is_user": False})
-        
